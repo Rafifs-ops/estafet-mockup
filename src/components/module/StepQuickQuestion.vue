@@ -14,17 +14,10 @@ const emit = defineEmits(['back', 'next'])
 const answers = reactive({})
 const questions = computed(() => props.content.questions)
 
-// Demo: semua pernyataan sudah terjawab dengan pilihan yang benar.
-watch(
-  questions,
-  (list) => {
-    Object.keys(answers).forEach((key) => delete answers[key])
-    list.forEach((question) => {
-      answers[question.id] = question.answer
-    })
-  },
-  { immediate: true },
-)
+// Jawaban interaktif: kosongkan saat berpindah modul agar mulai dari awal.
+watch(questions, () => {
+  Object.keys(answers).forEach((key) => delete answers[key])
+})
 const answeredCount = computed(
   () => questions.value.filter((question) => answers[question.id]).length,
 )
