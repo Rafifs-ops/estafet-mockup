@@ -7,6 +7,7 @@ import AiFeedbackPanel from './AiFeedbackPanel.vue'
 import AiMentorChat from './AiMentorChat.vue'
 import IdeaPrompter from './IdeaPrompter.vue'
 import { feedbackByRange } from '@/data/aiResponses'
+import { demoPracticeAnswer } from '@/data/user'
 import { feedbackRangeFor, useLearningStore } from '@/stores/learning'
 
 const props = defineProps({
@@ -18,7 +19,7 @@ const props = defineProps({
 const emit = defineEmits(['back', 'next'])
 const learning = useLearningStore()
 
-const text = ref('')
+const text = ref(props.state.history.length > 0 ? '' : demoPracticeAnswer)
 const loading = ref(false)
 const feedback = ref(null)
 const textarea = ref(null)

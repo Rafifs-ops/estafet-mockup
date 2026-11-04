@@ -1,5 +1,6 @@
 import { computed, ref, watch } from 'vue'
 import { defineStore } from 'pinia'
+import { demoProfile } from '@/data/user'
 
 const STORAGE_KEY = 'skular.profile.v1'
 
@@ -14,16 +15,7 @@ export const PROFILE_STEPS = [
   { n: 8, key: 'phone', name: 'Telepon', title: 'Nomor HP untuk pengingat deadline' },
 ]
 
-const defaults = {
-  level: '',
-  age: '',
-  gpa: '',
-  sktm: '',
-  target: '',
-  location: '',
-  field: '',
-  phone: '',
-}
+const defaults = { ...demoProfile }
 
 function loadState() {
   try {
@@ -72,8 +64,15 @@ export function isStepValid(step, form) {
 
 export const useProfileStore = defineStore('profile', () => {
   const saved = loadState()
+  const savedForm = saved?.form && typeof saved.form === 'object' ? saved.form : {}
+  // Nilai kosong dari state lama tidak menimpa default demo.
+  const filledSavedForm = Object.fromEntries(
+    Object.entries(savedForm).filter(
+      ([, value]) => value !== '' && value !== null && value !== undefined,
+    ),
+  )
 
-  const form = ref({ ...defaults, ...(saved?.form || {}) })
+  const form = ref({ ...defaults, ...filledSavedForm })
   const completed = ref(Boolean(saved?.completed))
   const step = ref(1)
 

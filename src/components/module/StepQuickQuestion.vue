@@ -1,5 +1,5 @@
 <script setup>
-import { computed, reactive } from 'vue'
+import { computed, reactive, watch } from 'vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
 import AppIcon from '@/components/ui/AppIcon.vue'
@@ -13,6 +13,18 @@ const emit = defineEmits(['back', 'next'])
 
 const answers = reactive({})
 const questions = computed(() => props.content.questions)
+
+// Demo: semua pernyataan sudah terjawab dengan pilihan yang benar.
+watch(
+  questions,
+  (list) => {
+    Object.keys(answers).forEach((key) => delete answers[key])
+    list.forEach((question) => {
+      answers[question.id] = question.answer
+    })
+  },
+  { immediate: true },
+)
 const answeredCount = computed(
   () => questions.value.filter((question) => answers[question.id]).length,
 )

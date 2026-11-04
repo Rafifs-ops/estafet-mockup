@@ -19,7 +19,11 @@ const options = [
   'Praktik membantu',
 ]
 
-const selected = ref(props.existing?.tags ? [...props.existing.tags] : [])
+const defaultTags = ['Materi relevan', 'AI feedback membantu']
+
+const selected = ref(
+  props.existing?.tags?.length ? [...props.existing.tags] : defaultTags,
+)
 const note = ref(props.existing?.note || '')
 const submitted = ref(Boolean(props.existing))
 

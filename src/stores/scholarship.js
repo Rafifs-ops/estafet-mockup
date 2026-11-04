@@ -1,6 +1,7 @@
 import { computed, ref, watch } from 'vue'
 import { defineStore } from 'pinia'
 import { scholarships, daysUntil, formatDate } from '@/data/scholarships'
+import { DEMO_MODE } from '@/data/user'
 import { useProfileStore } from './profile'
 
 const STORAGE_KEY = 'skular.scholarship.v1'
@@ -166,6 +167,14 @@ export const useScholarshipStore = defineStore('scholarship', () => {
       .sort((a, b) => b.score - a.score || a.days - b.days),
   )
 
+  // Demo: pilih otomatis beasiswa dengan skor tertinggi agar alur bisa
+  // langsung dilanjutkan tanpa memilih manual.
+  if (DEMO_MODE && selectedIds.value.length === 0 && matches.value.length > 0) {
+    const best = matches.value[0]
+    selectedIds.value = [best.id]
+    primaryId.value = best.id
+  }
+
   const selectedMatches = computed(() =>
     matches.value.filter((item) => selectedIds.value.includes(item.id)),
   )
@@ -217,6 +226,12 @@ export const useScholarshipStore = defineStore('scholarship', () => {
   function reset() {
     selectedIds.value = []
     primaryId.value = null
+    // Kembalikan pilihan default demo agar alur tetap bisa langsung dilanjutkan.
+    if (DEMO_MODE && matches.value.length > 0) {
+      const best = matches.value[0]
+      selectedIds.value = [best.id]
+      primaryId.value = best.id
+    }
   }
 
   watch(

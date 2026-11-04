@@ -4,11 +4,12 @@ import BaseBadge from '@/components/ui/BaseBadge.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import AppIcon from '@/components/ui/AppIcon.vue'
 import { ideaPrompts } from '@/data/aiResponses'
+import { demoIdeaAnswers } from '@/data/user'
 
 const emit = defineEmits(['insert'])
 
 const open = ref(false)
-const answers = reactive({})
+const answers = reactive({ ...demoIdeaAnswers })
 const draft = ref('')
 
 const filled = computed(() =>
